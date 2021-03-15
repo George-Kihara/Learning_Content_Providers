@@ -29,11 +29,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUp() {
         try {
-            binding.btnAdd.setOnClickListener(view -> onClickAddName());
+            binding.btnAdd.setOnClickListener(view -> {
+                if (validate()) {
+                    onClickAddName();
+                }
+            });
             binding.btnRetrieve.setOnClickListener(view -> onClickRetrieve());
         } catch (Exception e) {
             Log.e(TAG, "setUp: ", e);
         }
+    }
+
+    private boolean validate() {
+        boolean valid = true;
+        try {
+            if (binding.etName.getText().toString().matches("")) {
+                binding.etName.setError("Cannot be empty");
+                valid = false;
+            }
+
+            if (binding.etPoints.getText().toString().matches("")) {
+                binding.etPoints.setError("Cannot be empty");
+                valid = false;
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "validate: ", e);
+        }
+
+        return valid;
     }
 
     public void onClickAddName() {
@@ -51,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(getBaseContext(),
                     uri.toString(), Toast.LENGTH_LONG).show();
+
+            // reset the input fields
+            binding.etName.setText("");
+            binding.etPoints.setText("");
+
         } catch (Exception e) {
             Log.e(TAG, "onClickAddName: ", e);
         }
